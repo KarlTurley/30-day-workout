@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercise Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Exercise Tracker</h1>
+
+    <div class="video-container">
+        <video id="videoFeed" autoplay playsinline></video>
+        <canvas id="output"></canvas> <!-- Canvas for drawing keypoints and skeleton -->
+       <div id="guideOverlay" class="overlay">
+            <p id="guideText" class="guide-text">Position yourself in the center of the frame for a side view.</p>
+            <div id="shoulderLine" class="horizontal-line"></div>
+            <div id="hipLine" class="horizontal-line"></div>
+            <div id="ankleLine" class="horizontal-line"></div>
+
+          </div>
+      </div>
+      <div>
+        <label for="exerciseMode">Select Exercise:</label>
+        <select id="exerciseMode" onchange="setExerciseMode()">
+          <option value="pushup">Push-Up</option>
+          <option value="plank">Plank</option>
+        </select>
+      </div>
+    x      
+
+    <!-- Display counters for reps and duration -->
+    <div class="tracker">
+      <p>Reps: <span id="repCount">0</span></p>
+      <p>Duration: <span id="plankDuration">0 seconds</span></p>
+    </div>
+
+    <!-- Button to mark as completed and return to main app -->
+    <button id="completeButton" onclick="markAsComplete()">Mark as Completed</button>
+  </div>
+
+  <!-- Link to TensorFlow.js, MoveNet, and tracking logic -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
+  <script src="videoFeed.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

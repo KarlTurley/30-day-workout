@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>30-Day Plank and Push-Up Challenge</title>
+  <link rel="stylesheet" href="styles.css">
+
+    <!-- Enable standalone full-screen mode on iOS -->
+     
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="translucent">
+    <meta name="apple-mobile-web-app-title" content="Plank Challenge">
+
+     <!-- Home screen icon for iOS -->
+  <link rel="apple-touch-icon" href="icon.png">
+  
+  <link rel="manifest" href="manifest.json">
+
+</head>
+<body>
+  <div class="container">
+    <div class="header-group"> <img src="30 day app icon-2.png" width="60">
+      <h1>KT's 30-Day Plank and Push-Up Challenge</h1>
+  </div>  
+
+  <!-- Install App Modal -->
+<div id="installModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeInstallModal()">&times;</span>
+    <h2>Install the 30 Day Challenge App</h2><br>
+    <p>Get quick access to the 30 Day Challenge app directly from your home screen!</p>
+    <button id="installAppButton">Install App</button>
+  </div>
+</div>
+
+     <!-- Tracker & Countdown -->
+    <div class="tracker">
+      <div class="countdown-container">
+      <h2>Today's Goal</h2>
+      <h3 id="dayGoal">Day 1: 20 sec plank, 5 push-ups</h3>
+      <button onclick="generateICSFile()">Add to Calendar</button>
+    </div>
+
+      <div class="heart-rate-container" id="heart-rate-container">
+        <button id="connectHRButton" onclick="connectHeartRateMonitor()" style="display: none;">
+          Connect Heart Rate Monitor
+        </button>
+        <p id="heartRateDisplay" style="display: none;">Heart Rate: -- bpm</p>
+      </div>
+
+     <div class="Push-up feed">
+      <div class="countdown-container">
+      <h2>Track push ups</h2>
+     <!-- Button to open pushup.html with the day's target reps -->
+      <button id="openVideoFeed" onclick="openPushupTracker()">Open rep tracking</button>
+
+    </div>
+
+    <div class="countdown-container">
+        <h2 id="dayText">`Day 1 Plank Countdown timer`</h2>
+        <p id="countdownDisplay">00:35</p>
+        <div class="button-group">
+          <button id="startButton" onclick="startCountdown(35)">
+            <img src="play-icon.png" alt="Start" width="20" height="20">
+          </button>
+          <button id="stopButton" onclick="stopCountdown()" disabled>
+            <img src="stop-icon.png" alt="Stop" width="20" height="20">
+          </button>
+        </div>
+      </div>
+      <br><button onclick="markComplete()">Mark as Complete</button>
+      
+    </div>
+    <!-- Modal Structure -->
+  <div id="calendarModal" class="modal">
+  <div class="modal-content">
+    <p>Your calendar file is ready!</p>
+    <a id="downloadLink" href="" download="30_day_challenge.ics">Download and Add to Calendar</a>
+    <button onclick="closeModal()">Close</button>
+  </div>
+  </div>
+  <!-- Progress table -->
+  <div class="progress">
+    <br><h4>Progress</h4><br>
+    <div class="progress-container">
+      <div id="progressBar"></div>
+    </div>
+    
+    
+    <table id="progressTable">
+      <thead>
+        <tr>
+          <th>Day</th>
+          <th>Plank</th>
+          <th>Push-Ups</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="progressBody"></tbody>
+    </table>
+  </div>
+  <button class="reset-button" onclick="resetProgress()">Reset Progress</button>
+  
+  <script src="bluetoothHR.js"></script> <!-- Include bluetoothHR.js here -->
+  <script src="countdown.js"></script>
+  <script src="app.js"></script>
+  <script src="installapp.js"></script>
+
+</body>
+</html>

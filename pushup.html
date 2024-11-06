@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Push-Up Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Push-Up Tracker</h1><br>
+    <h4>Position the camera head-on in front of you & ensure that your hands and shoulders are clearly in the frame</h4><br>
+
+    <!-- Display target reps passed from index.html -->
+    <h3 id="targetReps">Target Reps: </h3><br>
+
+    <div class="video-container">
+      <video id="videoFeed" autoplay playsinline></video>
+      <canvas id="output"></canvas> <!-- Canvas for drawing keypoints and skeleton -->
+    </div>
+
+    <div id="countdownOverlay" class="countdown-overlay">3</div>
+
+    <div class="tracker">
+      <br><h4>Reps: <span id="repCount">0</span></h4>
+    </div>
+
+    <!-- Button to stop tracking manually -->
+    <button onclick="stopTracking()">Stop Tracking</button>
+
+    <!-- New button to return to main app -->
+    <button onclick="returnToMainApp()">Return to Main App</button>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
+    <script src="pushup.js"></script>
+    <script>
+      // Retrieve the reps parameter from the URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const targetReps = urlParams.get('reps') || 'N/A';
+
+      // Display the target reps
+      document.getElementById('targetReps').textContent = `Target Reps: ${targetReps}`;
+
+      // Function to navigate back to index.html
+      function returnToMainApp() {
+        window.location.href = 'index.html';
+      }
+    </script>
+  </div>
+</body>
+</html>
