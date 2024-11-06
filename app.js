@@ -185,7 +185,7 @@ function openPushupTracker() {
     const targetReps = challenge[currentDay].pushUps;
 
     // Open pushup.html with target reps as a URL parameter
-    window.location.href = `pushup.html?reps=${targetReps}`;
+    window.location.href = `30-day-workout/pushup.html?reps=${targetReps}`;
   } else {
     alert("Challenge completed!");
   }
