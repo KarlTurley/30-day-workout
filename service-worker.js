@@ -1,17 +1,18 @@
-const CACHE_NAME = '30-day-challenge-cache-v2';
+const CACHE_NAME = '30-day-challenge-cache-v3';
 const urlsToCache = [
-  'index.html',
-  'styles.css',
-  'app.js',
-  'installapp.js',
-  'countdown.js',
-  'bluetoothHR.js',
-  'pushup.js',
-  '/pushup.html',
-  'icon.png',
-  '30 day app icon-2.png',
-  'play-icon.png',
-  'stop-icon.png'
+  '/30-day-workout/',
+  '/30-day-workout/index.html',
+  '/30-day-workout/styles.css',
+  '/30-day-workout/app.js',
+  '/30-day-workout/installapp.js',
+  '/30-day-workout/countdown.js',
+  '/30-day-workout/bluetoothHR.js',
+  '/30-day-workout/pushup.js',
+  '/30-day-workout/pushup.html',
+  '/30-day-workout/icon.png',
+  '/30-day-workout/30 day app icon-2.png',
+  '/30-day-workout/play-icon.png',
+  '/30-day-workout/stop-icon.png'
 ];
 
 // Install event - cache resources
@@ -23,7 +24,7 @@ self.addEventListener('install', event => {
         return cache.addAll(urlsToCache);
       })
   );
-  self.skipWaiting(); // Forces the waiting service worker to become active
+  self.skipWaiting();
 });
 
 // Activate event - update cache if needed
@@ -40,20 +41,18 @@ self.addEventListener('activate', event => {
       );
     })
   );
-  self.clients.claim(); // Take control of any open clients
+  self.clients.claim();
 });
 
 // Fetch event - serve cached content when offline
 self.addEventListener('fetch', event => {
   if (event.request.mode === 'navigate') {
-    // For navigational requests, return index.html from cache or fetch
     event.respondWith(
-      caches.match('index.html').then((response) => {
-        return response || fetch(event.request).catch(() => caches.match('/index.html'));
+      caches.match('/30-day-workout/index.html').then((response) => {
+        return response || fetch(event.request).catch(() => caches.match('/30-day-workout/index.html'));
       })
     );
   } else {
-    // For all other requests, try cache first, then network
     event.respondWith(
       caches.match(event.request).then((response) => {
         return response || fetch(event.request);
@@ -61,4 +60,3 @@ self.addEventListener('fetch', event => {
     );
   }
 });
-
