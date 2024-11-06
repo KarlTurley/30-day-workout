@@ -184,8 +184,8 @@ function openPushupTracker() {
     // Retrieve today's target push-ups based on currentDay
     const targetReps = challenge[currentDay].pushUps;
 
-    // Open pushup.html with target reps as a URL parameter
-    window.location.href = `pushup.html?reps=${targetReps}`;
+    // Open pushup.html 
+    window.location.href = `pushup.html`;
   } else {
     alert("Challenge completed!");
   }
