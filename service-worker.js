@@ -49,7 +49,7 @@ self.addEventListener('fetch', event => {
   if (event.request.mode === 'navigate') {
     // For navigational requests, return index.html from cache or fetch
     event.respondWith(
-      caches.match('/index.html').then((response) => {
+      caches.match('index.html').then((response) => {
         return response || fetch(event.request).catch(() => caches.match('/index.html'));
       })
     );
