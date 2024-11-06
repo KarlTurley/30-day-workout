@@ -1,4 +1,4 @@
-const CACHE_NAME = '30-day-challenge-cache-v1';
+const CACHE_NAME = '30-day-challenge-cache-v2';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -24,6 +24,7 @@ self.addEventListener('install', event => {
         return cache.addAll(urlsToCache);
       })
   );
+  self.skipWaiting(); // Forces the waiting service worker to become active
 });
 
 // Activate event - update cache if needed
@@ -40,19 +41,24 @@ self.addEventListener('activate', event => {
       );
     })
   );
+  self.clients.claim(); // Take control of any open clients
 });
 
 // Fetch event - serve cached content when offline
 self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
+  if (event.request.mode === 'navigate') {
+    // For navigational requests, return index.html from cache or fetch
+    event.respondWith(
+      caches.match('/index.html').then((response) => {
+        return response || fetch(event.request).catch(() => caches.match('/index.html'));
+      })
+    );
+  } else {
+    // For all other requests, try cache first, then network
+    event.respondWith(
+      caches.match(event.request).then((response) => {
         return response || fetch(event.request);
       })
-      .catch(() => {
-        if (event.request.mode === 'navigate') {
-          return caches.match('/index.html');
-        }
-      })
-  );
+    );
+  }
 });
