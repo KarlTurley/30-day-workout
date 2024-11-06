@@ -1,6 +1,5 @@
 const CACHE_NAME = '30-day-challenge-cache-v2';
 const urlsToCache = [
-  '/',
   'index.html',
   'styles.css',
   'app.js',
