@@ -1,18 +1,18 @@
 const CACHE_NAME = '30-day-challenge-cache-v2';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/styles.css',
-  '/app.js',
-  '/installapp.js',
-  '/countdown.js',
-  '/bluetoothHR.js',
-  '/pushup.js',
-  '/pushup.html',
-  '/icon.png',
-  '/30 day app icon-2.png',
-  '/play-icon.png',
-  '/stop-icon.png'
+  '',
+  'index.html',
+  'styles.css',
+  'app.js',
+  'installapp.js',
+  'countdown.js',
+  'bluetoothHR.js',
+  'pushup.js',
+  'pushup.html',
+  'icon.png',
+  '30 day app icon-2.png',
+  'play-icon.png',
+  'stop-icon.png'
 ];
 
 // Install event - cache resources
