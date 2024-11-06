@@ -1,4 +1,4 @@
-const CACHE_NAME = '30-day-challenge-cache-v4'; // Incremented cache version
+const CACHE_NAME = '30-day-challenge-cache-v4'; // Updated cache version
 const urlsToCache = [
   '/30-day-workout/',
   '/30-day-workout/index.html',
@@ -15,19 +15,18 @@ const urlsToCache = [
   '/30-day-workout/stop-icon.png'
 ];
 
-// Install event - cache resources
+// Install event - cache initial resources
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Opened cache');
-        return cache.addAll(urlsToCache);
-      })
+    caches.open(CACHE_NAME).then(cache => {
+      console.log('Opened cache');
+      return cache.addAll(urlsToCache);
+    })
   );
   self.skipWaiting();
 });
 
-// Activate event - update cache if needed
+// Activate event - clear old caches
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
@@ -44,35 +43,45 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-// Fetch event - network-first strategy for dynamic files and cache-first for static assets
+// Fetch event - dynamic caching strategies
 self.addEventListener('fetch', event => {
-  if (event.request.url.includes('app.js') || event.request.url.includes('pushup.js')) {
-    // Network-first strategy for files that change frequently
+  if (event.request.mode === 'navigate') {
+    // Network-first for navigation requests
     event.respondWith(
-      fetch(event.request).then(networkResponse => {
-        return caches.open(CACHE_NAME).then(cache => {
-          cache.put(event.request, networkResponse.clone());
-          return networkResponse;
-        });
-      }).catch(() => caches.match(event.request)) // Fallback to cache if network fails
+      fetch(event.request)
+        .then(response => {
+          return caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, response.clone());
+            return response;
+          });
+        })
+        .catch(() => caches.match('/30-day-workout/index.html')) // Fallback to cache if network fails
     );
-  } else if (event.request.mode === 'navigate') {
-    // Handle navigation requests
+  } else if (event.request.url.includes('app.js') || event.request.url.includes('pushup.js')) {
+    // Network-first for frequently updated files
     event.respondWith(
-      caches.match('/30-day-workout/index.html').then(response => {
-        return response || fetch(event.request).catch(() => caches.match('/30-day-workout/index.html'));
-      })
-    );
-  } else {
-    // Cache-first strategy for all other static assets
-    event.respondWith(
-      caches.match(event.request).then(response => {
-        return response || fetch(event.request).then(networkResponse => {
+      fetch(event.request)
+        .then(networkResponse => {
           return caches.open(CACHE_NAME).then(cache => {
             cache.put(event.request, networkResponse.clone());
             return networkResponse;
           });
-        });
+        })
+        .catch(() => caches.match(event.request)) // Fallback to cache if network fails
+    );
+  } else {
+    // Cache-first for all other static assets
+    event.respondWith(
+      caches.match(event.request).then(response => {
+        return (
+          response ||
+          fetch(event.request).then(networkResponse => {
+            return caches.open(CACHE_NAME).then(cache => {
+              cache.put(event.request, networkResponse.clone());
+              return networkResponse;
+            });
+          })
+        );
       })
     );
   }
