@@ -1,6 +1,6 @@
 {
   "name": "30 Day Challenge App",
-  "short_name": "30 day Challenge App",
+  "short_name": "30 Strong",
   "description": "A 30-day challenge app for tracking planks and push-ups.",
   "start_url": "index.html",
   "display": "standalone",
