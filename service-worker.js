@@ -1,4 +1,4 @@
-const CACHE_NAME = '30-day-challenge-cache-v3';
+const CACHE_NAME = '30-day-challenge-cache-v4'; // Incremented cache version
 const urlsToCache = [
   '/30-day-workout/',
   '/30-day-workout/index.html',
@@ -44,18 +44,35 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-// Fetch event - serve cached content when offline
+// Fetch event - network-first strategy for dynamic files and cache-first for static assets
 self.addEventListener('fetch', event => {
-  if (event.request.mode === 'navigate') {
+  if (event.request.url.includes('app.js') || event.request.url.includes('pushup.js')) {
+    // Network-first strategy for files that change frequently
     event.respondWith(
-      caches.match('/30-day-workout/index.html').then((response) => {
+      fetch(event.request).then(networkResponse => {
+        return caches.open(CACHE_NAME).then(cache => {
+          cache.put(event.request, networkResponse.clone());
+          return networkResponse;
+        });
+      }).catch(() => caches.match(event.request)) // Fallback to cache if network fails
+    );
+  } else if (event.request.mode === 'navigate') {
+    // Handle navigation requests
+    event.respondWith(
+      caches.match('/30-day-workout/index.html').then(response => {
         return response || fetch(event.request).catch(() => caches.match('/30-day-workout/index.html'));
       })
     );
   } else {
+    // Cache-first strategy for all other static assets
     event.respondWith(
-      caches.match(event.request).then((response) => {
-        return response || fetch(event.request);
+      caches.match(event.request).then(response => {
+        return response || fetch(event.request).then(networkResponse => {
+          return caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, networkResponse.clone());
+            return networkResponse;
+          });
+        });
       })
     );
   }
