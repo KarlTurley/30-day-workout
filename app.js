@@ -185,7 +185,7 @@ function openPushupTracker() {
     const targetReps = challenge[currentDay].pushUps;
 
     // Open pushup.html 
-    window.location.href = `pushup.html`;
+    window.location.href = `pushup.html?reps=${targetReps}`;
   } else {
     alert("Challenge completed!");
   }
