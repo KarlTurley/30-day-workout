@@ -1,4 +1,4 @@
-const CACHE_NAME = '30-day-challenge-cache-v6'; // Updated cache version
+const CACHE_NAME = '30-day-challenge-cache-v7'; // Updated cache version
 const urlsToCache = [
   '/30-day-workout/',
   '/30-day-workout/index.html',
@@ -12,7 +12,6 @@ const urlsToCache = [
   '/30-day-workout/icon.png',
   '/30-day-workout/30 day app icon-2.png',
   '/30-day-workout/play-icon.png',
-  '/30-day-workout/stop-icon.png',
   '/30-day-workout/stop-icon.png',
   '/30-day-workout/Settings.png'
 ];
@@ -59,8 +58,13 @@ self.addEventListener('fetch', event => {
         })
         .catch(() => caches.match('/30-day-workout/index.html')) // Fallback to cache if network fails
     );
-  } else if (event.request.url.includes('app.js') || event.request.url.includes('pushup.js')) {
-    // Network-first for frequently updated files
+  } else if (
+    event.request.url.includes('index.html') ||
+    event.request.url.includes('styles.css') ||
+    event.request.url.includes('app.js') ||
+    event.request.url.includes('pushup.js')
+  ) {
+    // Network-first for frequently updated files (index.html, styles.css, app.js, pushup.js)
     event.respondWith(
       fetch(event.request)
         .then(networkResponse => {
