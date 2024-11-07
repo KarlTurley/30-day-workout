@@ -20,8 +20,8 @@
 </head>
 <body>
   <div class="container">
-    <div class="header-group"> <img src="30 day app icon-2.png" width="60">
-      <h1>KT's 30-Day Plank and Push-Up Challenge</h1>
+    <div class="header-group"> 
+      <button class="settingsButton" id="settingsButton" onclick="toggleCustomizeChallenge()"><img src="Settings.png" alt="Stop" width="5" height="5"></button>
   </div>  
 
   <!-- Install App Modal -->
@@ -32,6 +32,27 @@
     <p>Get quick access to the 30 Day Challenge app directly from your home screen!</p>
     <button id="installAppButton">Install App</button>
   </div>
+</div>
+
+
+ <!-- Settings modal -->
+<div class="customize-challenge" id="customize-challenge">
+  <h2> Set-up Your Challenge</h2>
+  <label for="startPlank">Starting Plank Duration (seconds):</label>
+  <input type="number" id="startPlank" value="35">
+  
+  <label for="startPushUps">Starting Push-Ups:</label>
+  <input type="number" id="startPushUps" value="7">
+  
+  <label for="plankIncrement">Plank Increment (seconds per day):</label>
+  <input type="number" id="plankIncrement" value="5">
+  
+  <label for="pushUpsIncrement">Push-Ups Increment (per day):</label>
+  <input type="number" id="pushUpsIncrement" value="1">
+  
+  <button onclick="generateChallenge()">Update Challenge</button>
+  <button class="reset-button" onclick="resetProgress()">Reset Progress</button>
+  <button id="closeButton" onclick="toggleCustomizeChallenge()">Close</button>
 </div>
 
      <!-- Tracker & Countdown -->
@@ -80,13 +101,16 @@
     <button onclick="closeModal()">Close</button>
   </div>
   </div>
-  <!-- Progress table -->
-  <div class="progress">
-    <br><h4>Progress</h4><br>
-    <div class="progress-container">
-      <div id="progressBar"></div>
-    </div>
-    
+  <!-- Progress -->
+   <div class="progressbar-container">
+  <h2>Progress</h2>
+  <div class="progress-container">
+    <div id="progressBar"></div>
+  </div>
+  <button id="ProgressButton" onclick="toggleProgressView()">See progress</button>
+</div>
+
+  <div class="progress"id=progressView>
     
     <table id="progressTable">
       <thead>
@@ -100,7 +124,7 @@
       <tbody id="progressBody"></tbody>
     </table>
   </div>
-  <button class="reset-button" onclick="resetProgress()">Reset Progress</button>
+  
   
   <script src="bluetoothHR.js"></script> <!-- Include bluetoothHR.js here -->
   <script src="countdown.js"></script>
