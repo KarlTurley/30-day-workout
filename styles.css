@@ -96,7 +96,7 @@ h4 {
   gap: 20px;
   justify-content: flex-end;
   text-align: center;
-  padding-bottom: 10px;
+  padding-bottom: 0px;
 }
 
 button {
@@ -106,7 +106,7 @@ button {
   border: none;
   border-radius: 30px;
   cursor: pointer;
-  margin: 5px;
+  margin: 2px;
 }
 
 button:hover {
@@ -444,4 +444,10 @@ button img {
   border-radius: 200px;
   font-size: 8px;
   cursor: pointer;
+}
+/* Style only the image inside the settingsButton button */
+#settingsimage {
+  width: 20px; /* Override width */
+  height: 20px; /* Override height */
+  /* Add more specific styles as needed */
 }
