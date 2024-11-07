@@ -446,7 +446,7 @@ button img {
   cursor: pointer;
 }
 /* Style only the image inside the settingsButton button */
-#settingsimage {
+.settingsButton img {
   width: 20px; /* Override width */
   height: 20px; /* Override height */
   /* Add more specific styles as needed */
