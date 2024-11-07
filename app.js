@@ -1,38 +1,22 @@
-
-const challenge = [
-  { day: 1, plank: 35, pushUps: 7 },
-  { day: 2, plank: 40, pushUps: 8 },
-  { day: 3, plank: 45, pushUps: 9 },
-  { day: 4, plank: 50, pushUps: 10 },
-  { day: 5, plank: 55, pushUps: 11 },
-  { day: 6, plank: 60, pushUps: 12 },
-  { day: 7, plank: 65, pushUps: 13 },
-  { day: 8, plank: 70, pushUps: 14 },
-  { day: 9, plank: 75, pushUps: 15 },
-  { day: 10, plank: 80, pushUps: 16 },
-  { day: 11, plank: 85, pushUps: 17 },
-  { day: 12, plank: 90, pushUps: 18 },
-  { day: 13, plank: 95, pushUps: 19 },
-  { day: 14, plank: 100, pushUps: 20 },
-  { day: 15, plank: 105, pushUps: 21 },
-  { day: 16, plank: 110, pushUps: 22 },
-  { day: 17, plank: 115, pushUps: 23 },
-  { day: 18, plank: 120, pushUps: 24 },
-  { day: 19, plank: 125, pushUps: 25 },
-  { day: 20, plank: 130, pushUps: 26 },
-  { day: 21, plank: 135, pushUps: 27 },
-  { day: 22, plank: 140, pushUps: 28 },
-  { day: 23, plank: 145, pushUps: 29 },
-  { day: 24, plank: 150, pushUps: 30 },
-  { day: 25, plank: 155, pushUps: 31 },
-  { day: 26, plank: 160, pushUps: 32 },
-  { day: 27, plank: 165, pushUps: 33 },
-  { day: 28, plank: 170, pushUps: 34 },
-  { day: 29, plank: 175, pushUps: 35 },
-  { day: 30, plank: 180, pushUps: 36 }
-];
-
 let currentDay = getSavedProgress();
+
+// Function to initialize the challenge based on user input
+function initializeChallenge(startPlank, startPushUps, plankIncrement, pushUpsIncrement) {
+  const challenge = [];
+
+  for (let day = 1; day <= 30; day++) {
+    challenge.push({
+      day: day,
+      plank: startPlank + (plankIncrement * (day - 1)),
+      pushUps: startPushUps + (pushUpsIncrement * (day - 1))
+    });
+  }
+
+  return challenge;
+}
+
+// Default challenge values
+let challenge = initializeChallenge(35, 7, 5, 1);
 
 function getSavedProgress() {
   const savedDay = localStorage.getItem('currentDay');
@@ -60,6 +44,7 @@ function loadProgress() {
   
   updateDayGoal();
   updateDayText(); // Update day text when loading progress
+  updatecountdownDisplay (); //Update countdown when loading progress
 }
 
 function markComplete() {
@@ -69,6 +54,8 @@ function markComplete() {
     saveProgress();
     updateDayGoal();
     updateDayText(); // Update day text when marking complete
+    updateProgressBar(); // Update progress bar
+    updatecountdownDisplay (); //Update countdown display
   }
 }
 
@@ -83,6 +70,7 @@ function updateDayGoal() {
     document.getElementById("dayGoal").textContent = "Challenge Completed!";
   }
 }
+
 function updateDayText() {
   if (currentDay < challenge.length) {
     const todayGoal = challenge[currentDay];
@@ -91,23 +79,93 @@ function updateDayText() {
     document.getElementById("dayText").textContent = "Challenge Completed!";
   }
 }
+
+
 function updateProgressBar() {
   const progressPercentage = ((currentDay / challenge.length) * 100).toFixed(2);
   document.getElementById("progressBar").style.width = `${progressPercentage}%`;
 }
 
-function markComplete() {
-  if (currentDay < challenge.length) {
-    document.getElementById(`status-${currentDay}`).innerHTML = '<span class="completed">Completed</span>';
-    currentDay++;
-    saveProgress();
-    updateDayGoal();
-    updateDayText(); // Update day text when marking complete
-    initializeCountdown(); 
-    updateProgressBar(); // Update progress bar
-  }
+function resetProgress() {
+  localStorage.removeItem('currentDay');
+  currentDay = 0;
+  loadProgress();
+  updateProgressBar();
 }
 
+//Function to display correct countdown
+function updatecountdownDisplay() {if (currentDay < challenge.length) {
+  const todayGoal = challenge[currentDay];
+  document.getElementById("countdownDisplay").textContent = `${todayGoal.plank} secs`;
+} else {
+  document.getElementById("countdownDisplay").textContent = "Challenge Completed!";
+}
+}
+  
+
+// Function to handle the user input and generate the new challenge
+function generateChallenge() {
+  const startPlank = parseInt(document.getElementById("startPlank").value, 10);
+  const startPushUps = parseInt(document.getElementById("startPushUps").value, 10);
+  const plankIncrement = parseInt(document.getElementById("plankIncrement").value, 10);
+  const pushUpsIncrement = parseInt(document.getElementById("pushUpsIncrement").value, 10);
+
+  // Initialize the challenge with user-defined values
+  challenge = initializeChallenge(startPlank, startPushUps, plankIncrement, pushUpsIncrement);
+
+  // Reset progress to start the new challenge
+  resetProgress();
+  loadProgress();
+}
+
+// Call updateProgressBar when loading progress initially
+document.addEventListener("DOMContentLoaded", () => {
+  loadProgress();
+  updateProgressBar(); // Show initial progress on page load
+});
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js')
+    .then((registration) => {
+      console.log('Service Worker registered with scope:', registration.scope);
+    })
+    .catch((error) => {
+      console.error('Service Worker registration failed:', error);
+    });
+}
+
+function openPushupTracker() {
+  if (currentDay < challenge.length) {
+    // Retrieve today's target push-ups based on currentDay
+    const targetReps = challenge[currentDay].pushUps;
+
+    // Open pushup.html with target reps as a URL parameter
+    window.location.href = `pushup.html?reps=${targetReps}`;
+  } else {
+    alert("Challenge completed!");
+  }
+}
+// Open settings module//
+
+function toggleCustomizeChallenge() {
+  const customizeContainer = document.getElementById('customize-challenge');
+  
+  if (customizeContainer.style.display === 'none' || customizeContainer.style.display === '') {
+    customizeContainer.style.display = 'flex';
+  } else {
+    customizeContainer.style.display = 'none';
+  }
+}
+//Open progress view
+function toggleProgressView() {
+  const customizeContainer = document.getElementById('progressView');
+  
+  if (customizeContainer.style.display === 'none' || customizeContainer.style.display === '') {
+    customizeContainer.style.display = 'flex';
+  } else {
+    customizeContainer.style.display = 'none';
+  }
+}
 function resetProgress() {
   localStorage.removeItem('currentDay');
   currentDay = 0;
@@ -142,7 +200,6 @@ END:VEVENT
 `;
     icsEvents.push(event);
   }
-
   const icsContent = `BEGIN:VCALENDAR
 VERSION:2.0
 CALSCALE:GREGORIAN
@@ -163,30 +220,4 @@ END:VCALENDAR`;
 
 function closeModal() {
   document.getElementById("calendarModal").style.display = "none";
-}
-
-// Call updateProgressBar when loading progress initially
-document.addEventListener("DOMContentLoaded", () => {
-  loadProgress();
-  updateProgressBar(); // Show initial progress on page load
-});
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js')
-    .then((registration) => {
-      console.log('Service Worker registered with scope:', registration.scope);
-    })
-    .catch((error) => {
-      console.error('Service Worker registration failed:', error);
-    });
-}
-function openPushupTracker() {
-  if (currentDay < challenge.length) {
-    // Retrieve today's target push-ups based on currentDay
-    const targetReps = challenge[currentDay].pushUps;
-
-    // Open pushup.html 
-    window.location.href = `pushup.html?reps=${targetReps}`;
-  } else {
-    alert("Challenge completed!");
-  }
 }
