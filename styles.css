@@ -122,6 +122,7 @@ button:hover {
 }
 
 input {
+  background-color: cadetblue;
   padding: 5px 30px;
   border: none;
   border-radius: 30px;
