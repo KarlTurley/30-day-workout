@@ -13,8 +13,8 @@ const urlsToCache = [
   '/30-day-workout/30 day app icon-2.png',
   '/30-day-workout/play-icon.png',
   '/30-day-workout/stop-icon.png',
-  /30-day-workout/stop-icon.png,
-  /30-day-workout/Settings.png
+  '/30-day-workout/stop-icon.png',
+  '/30-day-workout/Settings.png'
 ];
 
 // Install event - cache initial resources
