@@ -1,7 +1,7 @@
 const CACHE_NAME = '30-day-challenge-cache-v7'; // Updated cache version
 const urlsToCache = [
   '/30-day-workout/',
-  '/30-day-workout/index.html',
+  '/30-day-workout/index.html?v=2',
   '/30-day-workout/styles.css?v=2',
   '/30-day-workout/app.js',
   '/30-day-workout/installapp.js',
